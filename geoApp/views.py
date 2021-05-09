@@ -9,7 +9,7 @@ from folium.plugins import BoatMarker
 # Create your views here.
 def home(request):
     shp_dir = os.path.join(os.getcwd(),'media','shp')
-    df = pd.read_csv(r"https://raw.githubusercontent.com/vijay2834/GeoApp/main/global_power_plant_database.csv")
+    df = pd.read_csv(r"https://raw.githubusercontent.com/vijay2834/GeoApp/main/Data/global_power_plant_database.csv")
     df = df[df['country'] == 'IND']
     df_1 = df[df['primary_fuel'] == 'Coal']
     df_2 = df[df['primary_fuel'] != 'Coal']
