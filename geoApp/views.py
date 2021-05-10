@@ -3,8 +3,12 @@ import os
 import folium
 from folium.plugins import MarkerCluster
 import pandas as pd
-from folium.plugins import BoatMarker
-
+from folium.plugins import CirclePattern
+from folium.plugins import Draw
+from folium.plugins import MeasureControl
+from folium.plugins import MousePosition
+from folium.plugins import Geocoder
+from folium.features import CustomIcon
 
 # Create your views here.
 def home(request):
@@ -16,12 +20,27 @@ def home(request):
     df_1['primary_waste'] = ['fly ash']*(df_1.shape[0])
     df_2['primary_waste'] = ['fly ash']*(df_2.shape[0])
     map = folium.Map(location=[20.5937, 78.9629 ], zoom_start=5)
+    draw = Draw()
+    draw.add_to(map)
+    map.add_child(MeasureControl())
+    formatter = "function(num) {return L.Util.formatNum(num, 3) + ' º ';};"
+    MousePosition(
+        position="bottomright",
+        separator=" | ",
+        empty_string="NaN",
+        lng_first=True,
+        num_digits=20,
+        prefix="Coordinates:",
+        lat_formatter=formatter,
+        lng_formatter=formatter,
+    ).add_to(map)
+    Geocoder().add_to(map)
 
     marker_cluster_1 = MarkerCluster().add_to(map) # create marker clusters
     for i in range(df_1.shape[0]):
         location = [df_1['latitude'].iloc[i],df_1['longitude'].iloc[i]]
         tooltip = "Name:{}<br> Primary_waste: {}<br> Click for more".format(df_1["name"].iloc[i], df_1['primary_waste'].iloc[i])
-
+        CirclePattern()
         folium.Marker(location, # adding more details to the popup screen using HTML
                       popup="""
                       <i>Available waste (Tonnes): </i> <br> <b>{}</b> <br>
